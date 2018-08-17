@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">FirePhotoBlog</string>
+    <string name="login_logo_desc">Logo for login page</string>
+    <string name="pass_hint">Password...</string>
+    <string name="email_hint">Type your email...</string>
+    <string name="login_btn_txt">Login to account</string>
+    <string name="login_reg_btn_txt">Need a new Account?</string>
+</resources>
