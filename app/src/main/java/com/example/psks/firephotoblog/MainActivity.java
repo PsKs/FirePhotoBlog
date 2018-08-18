@@ -61,6 +61,11 @@ public class MainActivity extends AppCompatActivity {
                 signOut();
 
                 return true;
+            case R.id.action_settings_btn:
+
+                accountSetting();
+
+                return true;
             default:
                 return false;
         }
@@ -75,5 +80,11 @@ public class MainActivity extends AppCompatActivity {
     private void signOut() {
         mAuth.signOut();
         sendToSignIn();
+    }
+
+    private void accountSetting() {
+        Intent settingsIntent = new Intent(MainActivity.this, SetupActivity.class);
+        startActivity(settingsIntent);
+        finish();
     }
 }

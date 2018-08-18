@@ -70,7 +70,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
-                                            sendToMain();
+                                            sendToAccountSettingPage();
                                         } else {
                                             String errorMsg = task.getException().getMessage();
                                             Toast.makeText(RegisterActivity.this, "Authentication failed : " + errorMsg, Toast.LENGTH_SHORT).show();
@@ -120,5 +120,12 @@ public class RegisterActivity extends AppCompatActivity {
     private void sendToLoginPage() {
         Intent loginIntent = new Intent (RegisterActivity.this, LoginActivity.class);
         startActivity(loginIntent);
+        finish();
+    }
+
+    private void sendToAccountSettingPage() {
+        Intent settingIntent = new Intent (RegisterActivity.this, SetupActivity.class);
+        startActivity(settingIntent);
+        finish();
     }
 }
