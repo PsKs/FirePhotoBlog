@@ -8,4 +8,8 @@
     <string name="action_search_text">Search</string>
     <string name="action_setting_text">Account Settings</string>
     <string name="action_logout_text">Logout</string>
+    <string name="reg_btn_txt">Create new Account</string>
+    <string name="reg_login_txt">I have an Account</string>
+    <string name="reg_pass_txt">Password...</string>
+    <string name="reg_confirm_pass_txt">Comfirm Password...</string>
 </resources>

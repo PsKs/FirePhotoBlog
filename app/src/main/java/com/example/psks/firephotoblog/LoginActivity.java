@@ -35,8 +35,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         // Views
-        mEmailField = (EditText) findViewById(R.id.login_email);
-        mPasswordField = (EditText) findViewById(R.id.login_password);
+        mEmailField = (EditText) findViewById(R.id.reg_email);
+        mPasswordField = (EditText) findViewById(R.id.reg_confirm_pass);
 
         // Buttons
         bLogin = (Button) findViewById(R.id.loging_btn);
@@ -68,13 +68,20 @@ public class LoginActivity extends AppCompatActivity {
                                         Toast.makeText(LoginActivity.this, "Error : " + errorMsg, Toast.LENGTH_LONG).show();
                                     }
 
-                                pLoginProgrssBar.setVisibility(View.INVISIBLE);
+                                    pLoginProgrssBar.setVisibility(View.INVISIBLE);
 
                                 }
-                    });
+                            });
                     // [END sign_in_with_email]
                 }
 
+            }
+        });
+
+        bRegLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendToRegisterPage();
             }
         });
 
@@ -101,5 +108,10 @@ public class LoginActivity extends AppCompatActivity {
         Intent mainIntent = new Intent (LoginActivity.this, MainActivity.class);
         startActivity(mainIntent);
         finish();
+    }
+
+    private void sendToRegisterPage() {
+        Intent regIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+        startActivity(regIntent);
     }
 }

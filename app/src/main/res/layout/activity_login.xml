@@ -8,7 +8,7 @@
     tools:context=".LoginActivity">
 
     <ImageView
-        android:id="@+id/loginPageLogo"
+        android:id="@+id/regPageLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="62dp"
@@ -19,7 +19,7 @@
         app:srcCompat="@drawable/login_page_logo" />
 
     <EditText
-        android:id="@+id/login_email"
+        android:id="@+id/reg_email"
         android:layout_width="0dp"
         android:layout_height="54dp"
         android:layout_marginEnd="8dp"
@@ -36,10 +36,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginPageLogo" />
+        app:layout_constraintTop_toBottomOf="@+id/regPageLogo" />
 
     <EditText
-        android:id="@+id/login_password"
+        android:id="@+id/reg_confirm_pass"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -57,7 +57,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_email"
+        app:layout_constraintTop_toBottomOf="@+id/reg_email"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
@@ -76,7 +76,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_password" />
+        app:layout_constraintTop_toBottomOf="@+id/reg_confirm_pass" />
 
     <Button
         android:id="@+id/login_reg_btn"
