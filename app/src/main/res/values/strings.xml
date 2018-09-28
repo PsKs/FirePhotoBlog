@@ -12,4 +12,6 @@
     <string name="reg_login_txt">I have an Account</string>
     <string name="reg_pass_txt">Password...</string>
     <string name="reg_confirm_pass_txt">Comfirm Password...</string>
+    <string name="setup_name_hint">Your name...</string>
+    <string name="setup_btn_name_text">Save account settings</string>
 </resources>
