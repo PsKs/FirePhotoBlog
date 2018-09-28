@@ -85,7 +85,6 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(RegisterActivity.this, "Password doesn't match.", Toast.LENGTH_LONG).show();
                     }
                 }
-
             }
         });
 
