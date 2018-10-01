@@ -1,6 +1,7 @@
 package com.example.psks.firephotoblog;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,15 +9,24 @@ import android.view.Menu;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
     // [START declare_auth]
     private FirebaseAuth mAuth;
     // [END declare_auth]
+
+    private String currentUserId;
+
+    private FirebaseFirestore firebaseFirestore;
 
     private Toolbar mainToolbar;
     private FloatingActionButton addPostBtn;
@@ -29,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
+
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
         mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mainToolbar);
@@ -48,8 +60,24 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         FirebaseUser user = mAuth.getCurrentUser();
+
         if (user != null) {
             // User is signed in
+            currentUserId = user.getUid();
+            firebaseFirestore.collection("users").document(currentUserId).get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                if (!task.getResult().exists()) {
+                                    accountSetting();
+                                }
+                            } else {
+                                String error = task.getException().getMessage();
+                                Toast.makeText(MainActivity.this, "Error : " + error, Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
         } else {
             // No user is signed in
             sendToSignIn();
