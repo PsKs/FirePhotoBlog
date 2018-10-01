@@ -96,7 +96,8 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="color" value="ffffff" />
+                                                <entry key="color" value="b7b7b7" />
+                                                <entry key="paddingPercent" value="40" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -117,8 +118,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
+                                      <entry key="backgroundColor" value="3f3f3f" />
                                       <entry key="iconShape" value="NONE" />
-                                      <entry key="outputName" value="action_add" />
+                                      <entry key="outputName" value="add_img" />
                                     </map>
                                   </option>
                                 </PersistentState>
