@@ -19,27 +19,30 @@
     <ImageView
         android:id="@+id/new_post_image"
         android:layout_width="0dp"
-        android:layout_height="220dp"
-        android:scaleType="centerCrop"
+        android:layout_height="228dp"
+        android:background="@color/common_google_signin_btn_text_light_focused"
+        android:contentDescription="@string/new_post_img_desc"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/new_post_toolbar"
-        app:srcCompat="@drawable/spacex_falcon_heavy_test_launch" />
+        app:srcCompat="@mipmap/add_img" />
 
     <EditText
-        android:id="@+id/add_desc_text"
+        android:id="@+id/new_post_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="@string/post_desc_hint"
-        android:inputType="textMultiLine"
+        android:inputType="text"
+        android:maxLength="125"
         android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_post_image" />
+        app:layout_constraintTop_toBottomOf="@+id/new_post_image"
+        android:autofillHints="" />
 
     <Button
         android:id="@+id/post_btn"
@@ -55,6 +58,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_desc_text" />
+        app:layout_constraintTop_toBottomOf="@+id/new_post_desc" />
+
+    <ProgressBar
+        android:id="@+id/new_post_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/new_post_image" />
 
 </android.support.constraint.ConstraintLayout>
