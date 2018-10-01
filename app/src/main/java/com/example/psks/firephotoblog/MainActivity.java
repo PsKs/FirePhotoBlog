@@ -1,22 +1,25 @@
 package com.example.psks.firephotoblog;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Toolbar mainToolbar;
-
     // [START declare_auth]
     private FirebaseAuth mAuth;
     // [END declare_auth]
+
+    private Toolbar mainToolbar;
+    private FloatingActionButton addPostBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +32,15 @@ public class MainActivity extends AppCompatActivity {
 
         mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mainToolbar);
-
         getSupportActionBar().setTitle("FirePhotoBlog ( ﾟдﾟ)");
+
+        addPostBtn = findViewById(R.id.add_post_btn);
+        addPostBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postBlog();
+            }
+        });
     }
 
     @Override
@@ -85,6 +95,12 @@ public class MainActivity extends AppCompatActivity {
     private void accountSetting() {
         Intent settingsIntent = new Intent(MainActivity.this, SetupActivity.class);
         startActivity(settingsIntent);
+        finish();
+    }
+
+    private void postBlog() {
+        Intent newPostIntent = new Intent(MainActivity.this, NewPostActivity.class);
+        startActivity(newPostIntent);
         finish();
     }
 }
