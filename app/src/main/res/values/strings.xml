@@ -17,4 +17,10 @@
     <string name="post_desc_hint">Add Description</string>
     <string name="new_post_btn_hint">Post Blog</string>
     <string name="new_post_img_desc">Add new image.</string>
+    <string name="bottom_home_txt">Home</string>
+    <string name="bottom_notification_text">Notification</string>
+    <string name="bottom_account_text">Account</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
