@@ -9,9 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -38,13 +40,15 @@ public class HomeFragment extends Fragment {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
 
+    private DocumentSnapshot lastVisible;
+
     public HomeFragment() {
         // Required empty public constructor
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
@@ -62,12 +66,34 @@ public class HomeFragment extends Fragment {
 
             firebaseFirestore = FirebaseFirestore.getInstance();
 
-            Query firstQuery = firebaseFirestore.collection("posts").orderBy("timestamp", Query.Direction.DESCENDING);
+            blog_list_view.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+
+                    Boolean reachedBottom = !recyclerView.canScrollVertically(1);
+
+                    if (reachedBottom) {
+
+                        // String desc = lastVisible.getString("desc");
+                        // Toast.makeText(container.getContext(), "Reached: " + desc, Toast.LENGTH_LONG).show();
+
+                        nextPostLists();
+                    }
+                }
+            });
+
+            Query firstQuery = firebaseFirestore.collection("posts")
+                    .orderBy("timestamp", Query.Direction.DESCENDING)
+                    .limit(3);
 
             firstQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                    if (queryDocumentSnapshots != null) {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+
+                        lastVisible = queryDocumentSnapshots.getDocuments()
+                                .get(queryDocumentSnapshots.size() - 1);
 
                         for (DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
 
@@ -86,6 +112,36 @@ public class HomeFragment extends Fragment {
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    public void nextPostLists() {
+
+        Query nextQuery = firebaseFirestore.collection("posts")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .startAfter(lastVisible)
+                .limit(3);
+
+        nextQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (!queryDocumentSnapshots.isEmpty()) {
+
+                    lastVisible = queryDocumentSnapshots.getDocuments()
+                            .get(queryDocumentSnapshots.size() - 1);
+
+                    for (DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
+
+                        if (doc.getType() == DocumentChange.Type.ADDED) {
+
+                            BlogPost blogPost = doc.getDocument().toObject(BlogPost.class);
+                            blog_list.add(blogPost);
+
+                            blogRecyclerAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            }
+        });
     }
 
 }
