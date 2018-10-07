@@ -55,12 +55,18 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mainToolbar);
         getSupportActionBar().setTitle("FirePhotoBlog ( ﾟдﾟ)");
 
+        if (mAuth.getCurrentUser() == null) {
+            return;
+        }
+
         mainBottomNav = findViewById(R.id.mainBottomNav);
 
         // Fragments
         homeFragment = new HomeFragment();
         notificationFragment = new NotificationFragment();
         accountFragment = new AccountFragment();
+
+        replaceFragment(homeFragment);
 
         mainBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
