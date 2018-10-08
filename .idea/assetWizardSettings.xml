@@ -96,8 +96,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="color" value="b7b7b7" />
-                                                <entry key="paddingPercent" value="40" />
+                                                <entry key="color" value="f44336" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -108,7 +107,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/content/ic_add_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_favorite_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -118,9 +117,8 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="backgroundColor" value="3f3f3f" />
                                       <entry key="iconShape" value="NONE" />
-                                      <entry key="outputName" value="add_img" />
+                                      <entry key="outputName" value="action_like_accent" />
                                     </map>
                                   </option>
                                 </PersistentState>
