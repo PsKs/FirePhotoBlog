@@ -41,6 +41,7 @@ public class HomeFragment extends Fragment {
     private FirebaseFirestore firebaseFirestore;
 
     private DocumentSnapshot lastVisible;
+    private Boolean isFirstPageFirstLoad = true;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -92,19 +93,29 @@ public class HomeFragment extends Fragment {
                 public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                     if (!queryDocumentSnapshots.isEmpty()) {
 
-                        lastVisible = queryDocumentSnapshots.getDocuments()
-                                .get(queryDocumentSnapshots.size() - 1);
+                        if (isFirstPageFirstLoad) {
+                            lastVisible = queryDocumentSnapshots.getDocuments()
+                                    .get(queryDocumentSnapshots.size() - 1);
+                        }
 
                         for (DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
 
                             if (doc.getType() == DocumentChange.Type.ADDED) {
 
                                 BlogPost blogPost = doc.getDocument().toObject(BlogPost.class);
-                                blog_list.add(blogPost);
+
+                                if (isFirstPageFirstLoad) {
+                                    // Load into object
+                                    blog_list.add(blogPost);
+                                } else {
+                                    // If new post after loaded object add in first lists
+                                    blog_list.add(0, blogPost);
+                                }
 
                                 blogRecyclerAdapter.notifyDataSetChanged();
                             }
                         }
+                        isFirstPageFirstLoad = false;
                     }
                 }
             });
