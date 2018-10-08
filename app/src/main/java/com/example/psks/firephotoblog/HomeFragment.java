@@ -87,7 +87,7 @@ public class HomeFragment extends Fragment {
                     .orderBy("timestamp", Query.Direction.DESCENDING)
                     .limit(3);
 
-            firstQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            firstQuery.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                     if (!queryDocumentSnapshots.isEmpty()) {
@@ -121,7 +121,7 @@ public class HomeFragment extends Fragment {
                 .startAfter(lastVisible)
                 .limit(3);
 
-        nextQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        nextQuery.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (!queryDocumentSnapshots.isEmpty()) {
