@@ -33,8 +33,9 @@ import io.opencensus.tags.Tag;
  */
 public class HomeFragment extends Fragment {
 
-    private RecyclerView blog_list_view;
     private List<BlogPost> blog_list;
+
+    private RecyclerView blog_list_view;
     private BlogRecyclerAdapter blogRecyclerAdapter;
 
     private FirebaseAuth firebaseAuth;
@@ -46,7 +47,6 @@ public class HomeFragment extends Fragment {
     public HomeFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -102,7 +102,8 @@ public class HomeFragment extends Fragment {
 
                             if (doc.getType() == DocumentChange.Type.ADDED) {
 
-                                BlogPost blogPost = doc.getDocument().toObject(BlogPost.class);
+                                String blogPostId = doc.getDocument().getId();
+                                BlogPost blogPost = doc.getDocument().toObject(BlogPost.class).withId(blogPostId);
 
                                 if (isFirstPageFirstLoad) {
                                     // Load into object
@@ -144,7 +145,8 @@ public class HomeFragment extends Fragment {
 
                         if (doc.getType() == DocumentChange.Type.ADDED) {
 
-                            BlogPost blogPost = doc.getDocument().toObject(BlogPost.class);
+                            String blogPostId = doc.getDocument().getId();
+                            BlogPost blogPost = doc.getDocument().toObject(BlogPost.class).withId(blogPostId);
                             blog_list.add(blogPost);
 
                             blogRecyclerAdapter.notifyDataSetChanged();
