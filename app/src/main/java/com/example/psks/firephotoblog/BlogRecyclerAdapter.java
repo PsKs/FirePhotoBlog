@@ -162,6 +162,16 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
             }
         });
 
+        // Comment
+        holder.blogCommentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent commentIntent = new Intent(context, CommentActivity.class);
+                commentIntent.putExtra("blog_post_id", blogPostId);
+                context.startActivity(commentIntent);
+            }
+        });
     }
 
     @Override
@@ -176,8 +186,10 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
         private TextView descView;
         private TextView blogUserName;
         private TextView blogLikeCount;
+        private TextView blogCommentCount;
         private ImageView blogLikeBtn;
         private ImageView blogImageView;
+        private ImageView blogCommentBtn;
         private CircleImageView blogUserImage;
 
         public ViewHolder(View itemView) {
@@ -186,6 +198,7 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
             mView = itemView;
 
             blogLikeBtn = mView.findViewById(R.id.blog_like_btn);
+            blogCommentBtn = mView.findViewById(R.id.blog_comment_btn);
         }
 
         public void setUserData(String name, String image) {
