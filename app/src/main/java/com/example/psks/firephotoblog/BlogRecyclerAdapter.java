@@ -85,7 +85,8 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
         });
 
         String image_url = blog_list.get(position).getImage_url();
-        holder.setBlogImage(image_url);
+        String thumb_url = blog_list.get(position).getThumb_url();
+        holder.setBlogImage(image_url, thumb_url);
 
         String desc_data = blog_list.get(position).getDesc();
         holder.setDescText(desc_data);
@@ -201,7 +202,7 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
                     .into(blogUserImage);
         }
 
-        public void setBlogImage(String downloadUri) {
+        public void setBlogImage(String downloadUri, String thumbUri) {
             blogImageView = mView.findViewById(R.id.blog_image);
 
             RequestOptions placeholderOption = new RequestOptions();
@@ -209,6 +210,7 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
             Glide.with(context)
                     .applyDefaultRequestOptions(placeholderOption)
                     .load(downloadUri)
+                    .thumbnail(Glide.with(context).load(thumbUri))
                     .into(blogImageView);
         }
 
