@@ -94,6 +94,42 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
         String dateString = DateFormat.format("dd/MM/yyyy HH:ss", new Date(millisec)).toString();
         holder.setTime(dateString);
 
+        // Fetch user liked
+        firebaseFirestore
+                .collection("posts/" + blogPostId + "/likes")
+                .document(currentUserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+
+                        if (documentSnapshot.exists()) {
+                            holder.blogLikeBtn.setImageDrawable(context.getDrawable(R.mipmap.action_like_accent));
+
+                        } else {
+                            holder.blogLikeBtn.setImageDrawable(context.getDrawable(R.mipmap.action_like_gray));
+
+                        }
+                    }
+                });
+
+        // Likes count
+        firebaseFirestore
+                .collection("posts/" + blogPostId + "/likes")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+
+                        if (!queryDocumentSnapshots.isEmpty()) {
+
+                            int count = queryDocumentSnapshots.size();
+                            holder.updateLikesCount(count);
+
+                        } else {
+                            holder.updateLikesCount(0);
+                        }
+
+                    }
+                });
+
         // Like or Dislike
         holder.blogLikeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,6 +220,11 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
         public void setTime(String date) {
             blogDate = mView.findViewById(R.id.blog_date);
             blogDate.setText(date);
+        }
+
+        public void updateLikesCount(int count) {
+            blogLikeCount = mView.findViewById(R.id.blog_like_count);
+            blogLikeCount.setText(count + " Likes");
         }
     }
 
