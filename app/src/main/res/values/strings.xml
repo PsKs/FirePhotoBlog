@@ -23,4 +23,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="comment_label">Comments :</string>
+    <string name="comment_field_txt">Add a comment...</string>
 </resources>
