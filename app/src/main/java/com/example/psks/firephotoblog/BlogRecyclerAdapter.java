@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,7 +99,8 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
         // Fetch user liked
         firebaseFirestore
                 .collection("posts/" + blogPostId + "/likes")
-                .document(currentUserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                .document(currentUserId)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
 
@@ -172,6 +174,25 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
                 context.startActivity(commentIntent);
             }
         });
+
+        // Comments count
+        firebaseFirestore
+                .collection("posts/" + blogPostId + "/comments")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+
+                        if (!queryDocumentSnapshots.isEmpty()) {
+
+                            int count = queryDocumentSnapshots.size();
+                            holder.updateCommentsCount(count);
+
+                        } else {
+                            holder.updateCommentsCount(0);
+                        }
+                    }
+                });
+
     }
 
     @Override
@@ -240,6 +261,11 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
         public void updateLikesCount(int count) {
             blogLikeCount = mView.findViewById(R.id.blog_like_count);
             blogLikeCount.setText(count + " Likes");
+        }
+
+        public void updateCommentsCount(int count) {
+            blogCommentCount = mView.findViewById(R.id.blog_comment_count);
+            blogCommentCount.setText(count + " Comments");
         }
     }
 
