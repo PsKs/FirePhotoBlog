@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.bottom_action_account:
                         replaceFragment(accountFragment);
+                        return true;
 
                     default:
                         return false;
