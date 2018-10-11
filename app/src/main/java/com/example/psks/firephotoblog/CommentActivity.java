@@ -75,7 +75,7 @@ public class CommentActivity extends AppCompatActivity {
 
         // Fetch comment lists
         firebaseFirestore.collection("posts/" + blog_post_id + "/comments")
-                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .orderBy("timestamp", Query.Direction.ASCENDING)
                 .addSnapshotListener(CommentActivity.this, new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
