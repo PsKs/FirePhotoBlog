@@ -36,14 +36,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapter.ViewHolder> {
 
+    public List<User> user_list;
     public List<BlogPost> blog_list;
     public Context context;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
 
-    public BlogRecyclerAdapter (List<BlogPost> blog_list) {
+    public BlogRecyclerAdapter (List<BlogPost> blog_list, List<User> user_list) {
         this.blog_list = blog_list;
+        this.user_list = user_list;
     }
 
     @NonNull
@@ -66,24 +68,10 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
         final String blogPostId = blog_list.get(position).BlogPostId;
         final String currentUserId = firebaseAuth.getCurrentUser().getUid();
 
-        String user_id = blog_list.get(position).getUser_id();
+        String userName = user_list.get(position).getName();
+        String userImage = user_list.get(position).getImage();
 
-        firebaseFirestore.collection("users").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-
-                    String userName = task.getResult().getString("name");
-                    String userImage = task.getResult().getString("image");
-
-                    holder.setUserData(userName, userImage);
-
-                } else {
-                    String error = task.getException().getMessage();
-                    Toast.makeText(context, "Error : " + error, Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+        holder.setUserData(userName, userImage);
 
         String image_url = blog_list.get(position).getImage_url();
         String thumb_url = blog_list.get(position).getThumb_url();

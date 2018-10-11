@@ -2,15 +2,17 @@ package com.example.psks.firephotoblog;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -25,8 +27,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import io.opencensus.tags.Tag;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +34,7 @@ import io.opencensus.tags.Tag;
 public class HomeFragment extends Fragment {
 
     private List<BlogPost> blog_list;
+    private List<User> user_list;
 
     private RecyclerView blog_list_view;
     private BlogRecyclerAdapter blogRecyclerAdapter;
@@ -55,11 +56,12 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         blog_list = new ArrayList<>();
+        user_list = new ArrayList<>();
         blog_list_view = view.findViewById(R.id.blog_post_view);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-        blogRecyclerAdapter = new BlogRecyclerAdapter(blog_list);
+        blogRecyclerAdapter = new BlogRecyclerAdapter(blog_list, user_list);
         blog_list_view.setLayoutManager(new LinearLayoutManager(container.getContext()));
         blog_list_view.setAdapter(blogRecyclerAdapter);
 
@@ -91,29 +93,50 @@ public class HomeFragment extends Fragment {
             firstQuery.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+
                     if (!queryDocumentSnapshots.isEmpty()) {
 
                         if (isFirstPageFirstLoad) {
-                            lastVisible = queryDocumentSnapshots.getDocuments()
-                                    .get(queryDocumentSnapshots.size() - 1);
+                            lastVisible = queryDocumentSnapshots.getDocuments().get(queryDocumentSnapshots.size() - 1);
+                            blog_list.clear();
+                            user_list.clear();
                         }
 
                         for (DocumentChange doc : queryDocumentSnapshots.getDocumentChanges()) {
 
                             if (doc.getType() == DocumentChange.Type.ADDED) {
 
+                                String blogUserId = doc.getDocument().getString("user_id");
                                 String blogPostId = doc.getDocument().getId();
-                                BlogPost blogPost = doc.getDocument().toObject(BlogPost.class).withId(blogPostId);
+                                final BlogPost blogPost = doc.getDocument().toObject(BlogPost.class).withId(blogPostId);
 
-                                if (isFirstPageFirstLoad) {
-                                    // Load into object
-                                    blog_list.add(blogPost);
-                                } else {
-                                    // If new post after loaded object add in first lists
-                                    blog_list.add(0, blogPost);
-                                }
+                                firebaseFirestore.collection("users").document(blogUserId).get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
 
-                                blogRecyclerAdapter.notifyDataSetChanged();
+                                                if (task.isSuccessful()) {
+
+                                                    User user = task.getResult().toObject(User.class);
+
+                                                    if (isFirstPageFirstLoad) {
+                                                        // Load into object
+                                                        user_list.add(user);
+                                                        blog_list.add(blogPost);
+                                                    } else {
+                                                        // If new post after loaded object add in first lists
+                                                        user_list.add(0, user);
+                                                        blog_list.add(0, blogPost);
+                                                    }
+
+                                                    blogRecyclerAdapter.notifyDataSetChanged();
+
+                                                } else {
+                                                    String error = task.getException().getMessage();
+                                                    Toast.makeText(container.getContext(), "Error : " + error, Toast.LENGTH_LONG).show();
+                                                }
+                                            }
+                                        });
                             }
                         }
                         isFirstPageFirstLoad = false;
@@ -145,11 +168,30 @@ public class HomeFragment extends Fragment {
 
                         if (doc.getType() == DocumentChange.Type.ADDED) {
 
-                            String blogPostId = doc.getDocument().getId();
-                            BlogPost blogPost = doc.getDocument().toObject(BlogPost.class).withId(blogPostId);
-                            blog_list.add(blogPost);
+                            String blogUserId = doc.getDocument().getString("user_id");
+                            final String blogPostId = doc.getDocument().getId();
+                            final BlogPost blogPost = doc.getDocument().toObject(BlogPost.class).withId(blogPostId);
 
-                            blogRecyclerAdapter.notifyDataSetChanged();
+                            firebaseFirestore.collection("users").document(blogUserId).get()
+                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                                            if (task.isSuccessful()) {
+
+                                                User user = task.getResult().toObject(User.class);
+
+                                                user_list.add(user);
+                                                blog_list.add(blogPost);
+
+                                                blogRecyclerAdapter.notifyDataSetChanged();
+
+                                            } else {
+                                                String error = task.getException().getMessage();
+                                                Toast.makeText(getActivity(), "Error : " + error, Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
                         }
                     }
                 }
