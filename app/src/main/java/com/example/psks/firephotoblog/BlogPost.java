@@ -4,9 +4,9 @@ import java.util.Date;
 
 public class BlogPost extends BlogPostId {
 
-    public String user_id, image_url, thumb_url, desc;
+    private String user_id, image_url, thumb_url, desc;
 
-    public Date timestamp;
+    private Date timestamp;
 
     public BlogPost() {}
 
